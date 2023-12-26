@@ -27,7 +27,7 @@ This approach doesn't work with Microsoft accounts or accounts that have two-fac
 You receive an _interactive authentication is needed_ message.
 
 ```azurecli-interactive
-az login --user <username> --password <password>
+az login --username <username> --password <password>
 ```
 
 > [!IMPORTANT]

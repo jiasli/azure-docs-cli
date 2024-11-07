@@ -10,7 +10,7 @@ keywords: azure service principal, create service principal azure, create servic
 
 # Use an Azure service principal with certificate-based authentication
 
-When creating a service principal, you choose the type of sign-in authentication it uses. There are two types of authentication available for Azure service principals: **password-based authentication** and **certificate-based authentication**. 
+When creating a service principal, you choose the type of sign-in authentication it uses. There are two types of authentication available for Azure service principals: **password-based authentication** and **certificate-based authentication**.
 
 We recommend using certificate-based authentication due to the security restrictions of password-based authentication. Certificate-based authentication enables you to adopt a phishing resistant authentication by using [conditional access policies](/azure/active-directory/conditional-access/overview), which better protects Azure resources. To learn more about why certificate-based authentication is more secure, see [Microsoft Entra certificate-based authentication](/azure/active-directory/authentication/concept-certificate-based-authentication).
 
@@ -47,17 +47,21 @@ The contents of a PEM file can be viewed with a text editor. Here's a PEM file e
 
 ## Create a service principal using an existing certificate
 
-Create a service principal with an existing certificate by using the `--cert` parameter. Any tool that uses this service principal must have access to the certificate's private key. Certificates should be in an ASCII format such as PEM, CER, or DER. Pass the **certi897ficate** as a string, or use the `@path` format to load the certificate from a file.
-
-When you use a PEM file, the **CERTIFICATE** must be appended to the **PRIVATE KEY** within the file.
+Create a service principal with an existing certificate by using the `--cert` parameter. Any tool that uses this service principal must have access to the certificate's private key. Certificates should be in an ASCII format such as PEM, CER, or DER. Pass the certificate as a string, or use the `@path` format to load the certificate from a file. The `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` lines are optional. Only the public certificate is needed. Do not include the private key.
 
 ```azurecli-interactive
 # create a service principal with the certificate as a string
 az ad sp create-for-rbac --name myServicePrincipalName \
                          --role roleName \
                          --scopes /subscriptions/mySubscriptionID/resourceGroups/myResourceGroupName \
+                         --cert "MIICoT..."
+
+# or provide -----BEGIN CERTIFICATE----- and -----END CERTIFICATE----- lines
+az ad sp create-for-rbac --name myServicePrincipalName \
+                         --role roleName \
+                         --scopes /subscriptions/mySubscriptionID/resourceGroups/myResourceGroupName \
                          --cert "-----BEGIN CERTIFICATE-----
-...
+MIICoT...
 -----END CERTIFICATE-----"
 ```
 
